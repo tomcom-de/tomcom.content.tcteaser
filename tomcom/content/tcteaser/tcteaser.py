@@ -69,26 +69,6 @@ schema = Schema((
         ),
     ),
 
-
- ReferenceField('internal_link',
-        relationship='tcteaser-internal_iink',
-        multiValued=True,
-        isMetadata=True,
-        languageIndependent=False,
-        referencesSortable=True,
-        keepReferencesOnCopy=True,
-        callStorageOnSet=True,
-        widget=ReferenceBrowserWidget(
-            allow_search=True,
-            allow_browse=True,
-            allow_sorting=True,
-            show_indexes=False,
-            force_close_on_insert=True,
-            label = _(u'Internal link', default=u'Internal link'),
-            description='',
-            visible={'edit': 'visible', 'view': 'invisible'}
-        ),
-    ),
     TCExtensionImageBlobField('image',
         sizes = None,
         storage = AnnotationStorage(migrate=True),
@@ -104,6 +84,14 @@ schema = Schema((
             show_content_type = False,
         ),
     ),
+
+    StringField(
+        name='image_caption',
+        widget=StringField._properties['widget'](
+        label = _(u'Image caption', default=u'Image caption'),
+        ),
+    ),
+
     BooleanField(
         name='popup',
         widget=BooleanField._properties['widget'](
@@ -128,7 +116,7 @@ schema = Schema((
             label='Height',
             label_msgid='extendedlink_label_height',
             description='Only needed if link should be opened as popup.',
-            description_msgid='extendedlink_description_width',
+            description_msgid='extendedlink_description_height',
             i18n_domain='plone',
         ),
     ),
@@ -137,6 +125,16 @@ schema = Schema((
         widget=BooleanField._properties['widget'](
             label='Open blank',
             label_msgid='extendedlink_label_blank',
+            i18n_domain='plone',
+        ),
+    ),
+    StringField(
+        name='teaser_type',
+        widget=StringField._properties['widget'](
+            label='Type',
+            label_msgid='extendedlink_label_type',
+            description='Teaser type.',
+            description_msgid='extendedlink_description_type',
             i18n_domain='plone',
         ),
     ),
@@ -192,6 +190,11 @@ class TCTeaser(ATFolder):
         """Generate image tag using the api of the ImageField
         """
         return self.getField('image').tag(self, **kwargs)
+
+    def has_binary(self):
+        """ """
+        if self.getImage():
+            return True
 
 registerType(TCTeaser, PROJECTNAME)
 # end of class Teaser

@@ -33,20 +33,6 @@
 
     <objectcache:objectcache
         class=".tcteaser.TCTeaser"
-        fields="title description text external_link internal_link popup width height blank" />
-
-
-    <configure zcml:condition="installed plone.app.widgets">
-
-      <include package="archetypes.schemaextender" />
-
-      <adapter
-          name="tomcom.content.tcteaser.widgets"
-          factory=".extender.Extender"
-          for=".tcteaser.TCTeaser"
-          provides="archetypes.schemaextender.interfaces.ISchemaModifier"
-          />
-
-    </configure>
+        fields="title description text external_link relatedItems popup width height blank teaser_type image image_caption" />
 
 </configure>
